@@ -4,6 +4,5 @@ public class SudokuValidatorApp {
         SudokuValidator sudokuValidator = new SudokuValidator();
         sudokuValidator.fillSudokuArrayWithInvalidData();
         sudokuValidator.printRows();
-
     }
 }
