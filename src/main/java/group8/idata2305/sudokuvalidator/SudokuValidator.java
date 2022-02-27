@@ -63,14 +63,17 @@ public class SudokuValidator {
     }
 
     /**
-     *
+     * TODO: Separator is currently hardcoded as comma ",", this is not ideal if files have differing separators.
      * @param rowString A string consisting of a sudoku row, separated by the separator variable, usually ",".
      * @param separator A separator string, the string which separates the numbers in the row.
      */
     public int[] rowStringToArray(String rowString, String separator) {
         int[] rowArray = new int[sudokuSize];
+
+        //Cleans the strings so that only numbers and commas are left. Uses the commas to separate the numbers into a list.
         for(int i = 0; i < sudokuSize; i++) {
-            rowArray[i] = Integer.parseInt(rowString.split(separator)[i]);
+            int rowInt = Integer.parseInt(rowString.split(separator)[i].replaceAll("[^0-9,]", ""));
+            rowArray[i] = rowInt;
         }
         return rowArray;
     }

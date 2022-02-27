@@ -1,8 +1,12 @@
 package group8.idata2305.sudokuvalidator;
 
-public class SudokuValidatorApp {
-    public static void main (String args[]){
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class SudokuValidatorTestEnvironment {
+    public static void main (String args[]) throws IOException {
         SudokuValidator sudokuValidator = new SudokuValidator();
+        CSVSolutionReader solutionReader = new CSVSolutionReader();
 
         sudokuValidator.fillSudokuArrayWithInvalidTestData();
         sudokuValidator.printRows();
@@ -33,5 +37,16 @@ public class SudokuValidatorApp {
         int[] validArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println("Test on list with valid numbers, should be true: " + sudokuValidator.intListIsContainsValidIntegers(validArray));
         System.out.println();
+
+        ArrayList<String> rowList = solutionReader.readFile("C:\\Users\\Sindre\\Documents\\Skole lokal\\Dataingeniør år 2\\Semester 4\\Operativsystemer\\sudokuvalidator\\importTest.csv");
+        sudokuValidator.resetSudokuArray();
+        for (int i = 0; i < rowList.size(); i++) {
+            String row = rowList.get(i);
+            sudokuValidator.insertRowFromCommaString(row, i);
+        }
+
+        System.out.println("Behold the line read from file!!");
+        sudokuValidator.printRows();
+
     }
 }
