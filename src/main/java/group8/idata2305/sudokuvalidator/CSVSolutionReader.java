@@ -29,12 +29,9 @@ public class CSVSolutionReader{
             System.out.println("File not found!");
         }
 
-        //Reads and skips the first line on its own because we won't be using the first line at this point.
-      //  String lineString = reader.readLine();
         String lineString = "";
         while (lineString != null) {
             lineString = reader.readLine();
-            System.out.println(lineString);
 
             if (lineString != null) {
                 CSVLineList.add(lineString);

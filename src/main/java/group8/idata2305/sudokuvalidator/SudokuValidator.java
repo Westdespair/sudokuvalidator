@@ -1,5 +1,7 @@
 package group8.idata2305.sudokuvalidator;
 
+import java.util.ArrayList;
+
 /**
  * Validates 9x9 sudoku solutions.
  */
@@ -16,6 +18,16 @@ public class SudokuValidator {
      */
     public void resetSudokuArray() {
         sudokuArray = new int[sudokuSize][sudokuSize];
+    }
+
+    /**
+     * Reads an array of strings, and inputs this to the sudokuarray.
+     * @param stringArray array of strings that will be used.
+     */
+    public void inputStringArrayAsSolution(ArrayList<String> stringArray) {
+        for (int i = 0; i < sudokuSize; i++) {
+            insertRowFromCommaString(stringArray.get(i),i);
+        }
     }
 
     public boolean isSudokuArrayValid() {
@@ -47,7 +59,7 @@ public class SudokuValidator {
                 int currentNum = sudokuArray[rowNum][colNum];
                 rowString.append(currentNum).append("  ");
             }
-            System.out.println(rowString);
+                System.out.println(rowString);
         }
     }
 
@@ -114,7 +126,7 @@ public class SudokuValidator {
      * @param boxNum
      * @return
      */
-    private boolean isBoxValid(int boxNum){
+    public boolean isBoxValid(int boxNum){
         boolean isValid = false;
         int[] boxList = convertBoxToIntList(boxNum % 2,(int) ((boxNum+0.1)/3.1));
         // ^Logic that makes traversing the boxes change from this:
@@ -139,7 +151,7 @@ public class SudokuValidator {
      * @param columnNum
      * @return
      */
-    private boolean isColumnValid(int columnNum) {
+    public boolean isColumnValid(int columnNum) {
         boolean isValid = false;
         int[] columnList = convertColumnToIntList(columnNum);
 
