@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * A sudokuValidator client which runs in 4 threads - boxvalidation, rowvalidation, columnvalidation, and user input
+ * A sudokuValidator client which runs in 4 threads - boxValidation, rowValidation, columnValidation, and user input
  */
 public class FourThreadSudokuClient extends Thread {
     SudokuValidator sudokuValidator = new SudokuValidator();
@@ -37,18 +37,21 @@ public class FourThreadSudokuClient extends Thread {
             boolean running = true;
             Scanner scanner = new Scanner(System.in);
 
+            //User activity happens inside this loop, as long as the user decides to continue.
             while(running) {
                 System.out.print("Enter filename of comma-separated sudoku solution .csv file: ");
-                //User provides a filepath.
+                //User provides a full filepath to the CSV-file via the console.
                 String filePath = scanner.nextLine();
                 File csvFile = new File(filePath);
 
+                //If the provided file doesn't exist, make the user write a new filepath.
                 while (!csvFile.exists()) {
                     System.out.print("Try another filepath: ");
                     filePath = scanner.nextLine();
                     csvFile = new File(filePath);
                 }
                 System.out.println("Filepath: " + filePath);
+                //Attempts to read and print out the sudoku solution.
                     try {
                         sudokuValidator.inputStringArrayAsSolution(solutionReader.readFile(filePath));
                         sudokuValidator.printRows();
@@ -56,30 +59,40 @@ public class FourThreadSudokuClient extends Thread {
                         e.printStackTrace();
                     }
 
-                boxThread = new BoxThread();
-                boxThread.run();
+                    //Starts a thread to validate the 3x3 boxes of the solution.
+                    boxThread = new BoxThread();
+                    boxThread.run();
 
-                columnThread = new ColumnThread();
-                columnThread.run();
+                    //Starts a thread to validate the 1x9 columns of the solution.
+                    columnThread = new ColumnThread();
+                    columnThread.run();
 
-                rowThread = new RowThread();
-                rowThread.run();
+                    //Starts a thread to validate the 9x1 rows of the solution.
+                    rowThread = new RowThread();
+                    rowThread.run();
 
-                if(boxThread.allBoxesValid() && columnThread.allColumnsValid() && rowThread.allRowsValid()) {
-                    System.out.println("The provided solution is valid!");
-                }
+                    //Checks if the solution is valid by checking if all threads are valid.
+                    if(boxThread.allBoxesValid() && columnThread.allColumnsValid() && rowThread.allRowsValid()) {
+                        System.out.println("The provided solution is valid!");
+                    }
 
-                System.out.println("Do you want to check another file? Y/N");
-                String response = scanner.nextLine().toUpperCase().replaceAll("[^YN]","");
+                    //Asks the user if they want to continue. If Y, continue, if N, exit.
+                    System.out.println("Do you want to check another file? Y/N");
+                    String response = scanner.nextLine().toUpperCase().replaceAll("[^YN]","");
 
-                //If user replies with N, close the application.
-                if (response.contains("N") && !response.contains("Y")){
-                    System.out.println("Closing application...");
-                    running = false;
-                }
+                    //If user replies with N, close the application.
+                    if (response.contains("N") && !response.contains("Y")){
+                        System.out.println("Closing application...");
+                        running = false;
+                    }
             }
         }
 
+        /**
+         * Reads a .csv file and adds the solution to the sudokuvalidator
+         * @param filePath The full path of the file, including the filename.
+         * @throws IOException if the file can't be read.
+         */
         public void readFileToSudokuValidator(String filePath) throws IOException {
             ArrayList<String> rowList = solutionReader.readFile(filePath);
             sudokuValidator.resetSudokuArray();
@@ -90,6 +103,10 @@ public class FourThreadSudokuClient extends Thread {
         }
     }
 
+    /**
+     * When a BoxThread thread is run, it checks all 3x3 boxes of the sudoku solution.
+     * Contains true if valid, false if invalid.
+     */
     class BoxThread implements Runnable {
         boolean isValid = true;
 
@@ -106,7 +123,10 @@ public class FourThreadSudokuClient extends Thread {
             return isValid;
         }
     }
-
+    /**
+     * When a RowThread thread is run, it checks all 1x9 rows of the sudoku solution.
+     * Contains true if valid, false if invalid.
+     */
         class RowThread implements Runnable {
             boolean isValid = true;
 
@@ -123,6 +143,10 @@ public class FourThreadSudokuClient extends Thread {
                 return isValid;
             }
     }
+    /**
+     * When a ColumnThread thread is run, it checks all 9x1 columns of the sudoku solution.
+     * Contains true if valid, false if invalid.
+     */
         class ColumnThread implements Runnable {
             boolean isValid = true;
 
